@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voucher Entri Kas Keluar</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for better visual experience */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="h-full font-sans text-slate-800 antialiased flex flex-col justify-between">
+
+    <!-- Navigation / Header Bar -->
+    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid me-0 fa-file-invoice-dollar text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold leading-none tracking-tight">Sistem Akuntansi Keuangan</h1>
+                    <p class="text-xs text-slate-400 mt-1">Formulir Voucher Entri Kas Keluar</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <button type="button" onclick="loadSampleData()" class="px-3 py-1.5 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+                    <span>Isi Contoh Data</span>
+                </button>
+                <button type="button" onclick="resetForm()" class="px-3 py-1.5 text-xs font-medium bg-slate-800 hover:bg-rose-950/40 text-slate-300 hover:text-rose-400 border border-slate-700 hover:border-rose-800/50 rounded-lg transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    <span>Reset</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow">
+        <form id="voucherForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
+
+            <!-- SECTION 1: Header Voucher Information -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 transition-all hover:shadow-md">
+                <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-100">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+                        <h2 class="text-base font-semibold text-slate-800">Informasi Header Transaksi</h2>
+                    </div>
+                    <span class="text-xs font-mono bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md border border-slate-200">Tipe: Kas Keluar (BKK)</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Tanggal -->
+                    <div>
+                        <label for="transactionDate" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
+                            Tanggal Transaksi <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="date" id="transactionDate" required class="w-full pl-10 pr-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all outline-none font-medium text-slate-700">
+                            <i class="fa-regular fa-calendar absolute left-3.5 top-3 text-slate-400 pointer-events-none"></i>
+                        </div>
+                    </div>
+
+                    <!-- Nomor Referensi -->
+                    <div>
+                        <label for="referenceNo" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
+                            Nomor Referensi <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="referenceNo" placeholder="Contoh: BKK-2026/10/001" required class="w-full pl-10 pr-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all outline-none font-mono text-slate-800 uppercase font-medium">
+                            <i class="fa-solid fa-hashtag absolute left-3.5 top-3 text-slate-400 pointer-events-none"></i>
+                        </div>
+                    </div>
+
+                    <!-- Dibayarkan Kepada / Penerima -->
+                    <div>
+                        <label for="paidTo" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
+                            Penerima / Dibayarkan Kepada
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="paidTo" placeholder="Contoh: PT Provider Telkom / Toko ATK" class="w-full pl-10 pr-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all outline-none font-medium text-slate-700">
+                            <i class="fa-regular fa-user absolute left-3.5 top-3 text-slate-400 pointer-events-none"></i>
+                        </div>
+                    </div>
+
+                    <!-- Deskripsi / Catatan -->
+                    <div class="md:col-span-3">
+                        <label for="description" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
+                            Deskripsi Utama Transaksi <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="description" placeholder="Contoh: Pembayaran tagihan listrik & pembelian perlengkapan kantor bulan Oktober 2026" required class="w-full pl-10 pr-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all outline-none text-slate-700">
+                            <i class="fa-regular fa-note-sticky absolute left-3.5 top-3 text-slate-400 pointer-events-none"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: Dynamic Journal Table -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-all hover:shadow-md">
+                <div class="p-6 pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 gap-4">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+                        <h2 class="text-base font-semibold text-slate-800">Rincian Baris Jurnal</h2>
+                    </div>
+                    <button type="button" onclick="addJournalRow()" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 active:bg-indigo-200 rounded-xl text-xs font-semibold transition-all border border-indigo-200 shadow-sm">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span>Tambah Baris Akun</span>
+                    </button>
+                </div>
+
+                <!-- Table Container -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                                <th class="py-3 px-4 w-12 text-center">No</th>
+                                <th class="py-3 px-4 min-w-[260px]">Pilihan Akun (COA) <span class="text-rose-500">*</span></th>
+                                <th class="py-3 px-4 min-w-[200px]">Keterangan Baris (Memo)</th>
+                                <th class="py-3 px-4 w-48 text-right">Input Debit (Rp)</th>
+                                <th class="py-3 px-4 w-48 text-right">Input Kredit (Rp)</th>
+                                <th class="py-3 px-4 w-16 text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="journalTableBody" class="divide-y divide-slate-100 text-sm">
+                            <!-- Rows will be injected dynamically via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Summary / Totals Footer -->
+                <div class="bg-slate-50/90 border-t border-slate-200 p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                        
+                        <!-- Status Indicator Pill -->
+                        <div class="md:col-span-5 flex items-center">
+                            <div id="statusBadge" class="w-full px-4 py-3 rounded-xl border flex items-center justify-between transition-all duration-300 bg-slate-100 border-slate-300 text-slate-600">
+                                <div class="flex items-center space-x-2.5">
+                                    <span id="statusIcon" class="w-3 h-3 rounded-full bg-slate-400 inline-block animate-pulse"></span>
+                                    <span id="statusText" class="font-bold text-sm tracking-wide">Pemeriksaan Keseimbangan...</span>
+                                </div>
+                                <span id="selisihText" class="text-xs font-mono font-medium hidden">Selisih: Rp 0</span>
+                            </div>
+                        </div>
+
+                        <!-- Total Calculations -->
+                        <div class="md:col-span-7 grid grid-cols-2 gap-4">
+                            <!-- Total Debit -->
+                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm text-right">
+                                <span class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Total Debit</span>
+                                <span id="totalDebitDisplay" class="text-lg font-bold font-mono text-slate-800">Rp 0</span>
+                            </div>
+
+                            <!-- Total Kredit -->
+                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm text-right">
+                                <span class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Total Kredit</span>
+                                <span id="totalCreditDisplay" class="text-lg font-bold font-mono text-slate-800">Rp 0</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Action Footer -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+                <div class="text-xs text-slate-500 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-indigo-500"></i>
+                    <span>Catatan: Pastikan nilai Total Debit dan Kredit seimbang sebelum mengirim formulir.</span>
+                </div>
+
+                <button type="submit" id="submitBtn" disabled class="w-full sm:w-auto px-8 py-3 bg-slate-300 text-slate-500 font-semibold rounded-xl transition-all shadow-none flex items-center justify-center gap-2 cursor-not-allowed">
+                    <i class="fa-solid fa-paper-plane text-sm"></i>
+                    <span>Submit Voucher Jurnal</span>
+                </button>
+            </div>
+
+        </form>
+    </main>
+
+    <!-- Footer Credit -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-400">
+        Voucher Entri Kas Keluar &bull; Sistem Akuntansi Keuangan
+    </footer>
+
+    <!-- JSON Output Modal -->
+    <div id="jsonModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-slate-900 text-slate-100 rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-800 transform scale-95 transition-transform duration-300" id="jsonModalCard">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                    <h3 class="text-sm font-bold text-white tracking-wide uppercase font-mono">Payload JSON Voucher Kas Keluar</h3>
+                </div>
+                <button type="button" onclick="closeJsonModal()" class="text-slate-400 hover:text-white transition-colors p-1 rounded-lg">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (JSON Code Preview) -->
+            <div class="p-6 overflow-y-auto flex-grow font-mono text-xs bg-slate-950/80 text-emerald-400">
+                <pre id="jsonContent" class="whitespace-pre-wrap break-all"></pre>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-4 border-t border-slate-800 bg-slate-900/90 flex flex-wrap items-center justify-between gap-3">
+                <span class="text-xs text-slate-400">Data siap diproses oleh API backend backend ledger.</span>
+                <div class="flex items-center space-x-3">
+                    <button type="button" onclick="copyJsonToClipboard()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/30">
+                        <i class="fa-regular fa-copy"></i>
+                        <span id="copyBtnText">Salin JSON</span>
+                    </button>
+                    <button type="button" onclick="closeJsonModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold transition-all">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <script>
+        // Master Data: Chart of Accounts (COA) Options
+        const CHART_OF_ACCOUNTS = [
+            { code: "1010", name: "Kas Utama", category: "Aset Lancar" },
+            { code: "1020", name: "Bank BCA - 8800129381", category: "Aset Lancar" },
+            { code: "1030", name: "Kas Kecil (Petty Cash)", category: "Aset Lancar" },
+            { code: "1300", name: "Perlengkapan Kantor", category: "Aset Lancar" },
+            { code: "1400", name: "Uang Muka Operasional", category: "Aset Lancar" },
+            { code: "2100", name: "Utang Usaha", category: "Kewajiban" },
+            { code: "2200", name: "Utang Gaji & PPh 21", category: "Kewajiban" },
+            { code: "5100", name: "Beban Gaji & Tunjangan", category: "Beban Operasional" },
+            { code: "5200", name: "Beban Sewa Gedung", category: "Beban Operasional" },
+            { code: "5300", name: "Beban Listrik, Air & Internet", category: "Beban Operasional" },
+            { code: "5400", name: "Beban Perlengkapan & ATK", category: "Beban Operasional" },
+            { code: "5500", name: "Beban Pemeliharaan & Perbaikan", category: "Beban Operasional" },
+            { code: "5600", name: "Beban Konsumsi & Jamuan", category: "Beban Operasional" },
+            { code: "5900", name: "Beban Lain-Lain", category: "Beban Operasional" }
+        ];
+
+        // State Store
+        let journalRows = [];
+        let nextRowId = 1;
+
+        // On Page Load Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('transactionDate').value = today;
+
+            // Generate default Ref No
+            document.getElementById('referenceNo').value = generateDefaultRefNo();
+
+            // Initialize with 2 default empty rows (Typical debit & credit template)
+            addJournalRow();
+            addJournalRow();
+
+            // Initial calculation check
+            calculateTotals();
+        });
+
+        // Generate auto Ref No
+        function generateDefaultRefNo() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const randomSeq = String(Math.floor(Math.random() * 900) + 100);
+            return `BKK-${year}/${month}/${randomSeq}`;
+        }
+
+        // Add a new row to the journal table
+        function addJournalRow(presetData = null) {
+            const rowId = nextRowId++;
+            const row = {
+                id: rowId,
+                accountCode: presetData ? presetData.accountCode : '',
+                memo: presetData ? presetData.memo : '',
+                debit: presetData ? presetData.debit : 0,
+                credit: presetData ? presetData.credit : 0
+            };
+
+            journalRows.push(row);
+            renderTableRows();
+            calculateTotals();
+        }
+
+        // Delete a row from the journal table
+        function deleteJournalRow(rowId) {
+            if (journalRows.length <= 1) {
+                showToast("Jurnal minimal harus memiliki 1 baris!", "warning");
+                return;
+            }
+            journalRows = journalRows.filter(r => r.id !== rowId);
+            renderTableRows();
+            calculateTotals();
+        }
+
+        // Render table rows DOM
+        function renderTableRows() {
+            const tbody = document.getElementById('journalTableBody');
+            tbody.innerHTML = '';
+
+            journalRows.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/60 transition-colors group";
+                
+                // Account selector options
+                let accountOptionsHtml = `<option value="">-- Pilih Kode / Nama Akun --</option>`;
+                CHART_OF_ACCOUNTS.forEach(acc => {
+                    const selected = acc.code === row.accountCode ? 'selected' : '';
+                    accountOptionsHtml += `<option value="${acc.code}" ${selected}>[${acc.code}] ${acc.name}</option>`;
+                });
+
+                tr.innerHTML = `
+                    <td class="py-3 px-4 text-center text-xs font-mono font-medium text-slate-400 group-hover:text-slate-600">${index + 1}</td>
+                    <td class="py-3 px-4">
+                        <select onchange="updateRowField(${row.id}, 'accountCode', this.value)" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+                            ${accountOptionsHtml}
+                        </select>
+                    </td>
+                    <td class="py-3 px-4">
+                        <input type="text" value="${escapeHtml(row.memo)}" placeholder="Catatan baris (opsional)" oninput="updateRowField(${row.id}, 'memo', this.value)" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+                    </td>
+                    <td class="py-3 px-4">
+                        <div class="relative">
+                            <span class="absolute left-2.5 top-2 text-xs text-slate-400 font-mono">Rp</span>
+                            <input type="text" inputmode="numeric" value="${row.debit ? formatNumberInput(row.debit) : ''}" placeholder="0" oninput="handleAmountInput(this, ${row.id}, 'debit')" class="w-full text-right bg-white border border-slate-300 rounded-lg pl-8 pr-3 py-2 text-xs font-mono font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+                        </div>
+                    </td>
+                    <td class="py-3 px-4">
+                        <div class="relative">
+                            <span class="absolute left-2.5 top-2 text-xs text-slate-400 font-mono">Rp</span>
+                            <input type="text" inputmode="numeric" value="${row.credit ? formatNumberInput(row.credit) : ''}" placeholder="0" oninput="handleAmountInput(this, ${row.id}, 'credit')" class="w-full text-right bg-white border border-slate-300 rounded-lg pl-8 pr-3 py-2 text-xs font-mono font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+                        </div>
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                        <button type="button" onclick="deleteJournalRow(${row.id})" title="Hapus Baris" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-all inline-flex items-center justify-center">
+                            <i class="fa-regular fa-trash-can text-sm"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Update field value in array state
+        function updateRowField(rowId, field, value) {
+            const row = journalRows.find(r => r.id === rowId);
+            if (row) {
+                row[field] = value;
+            }
+        }
+
+        // Handle numeric currency inputs (Auto Mutually Exclusive Debit vs Credit per line UX)
+        function handleAmountInput(inputElem, rowId, type) {
+            let cleanVal = inputElem.value.replace(/[^0-9]/g, '');
+            let numericVal = parseInt(cleanVal, 10) || 0;
+
+            const row = journalRows.find(r => r.id === rowId);
+            if (!row) return;
+
+            if (type === 'debit') {
+                row.debit = numericVal;
+                if (numericVal > 0) {
+                    row.credit = 0; // Standard single-entry row convenience
+                }
+            } else if (type === 'credit') {
+                row.credit = numericVal;
+                if (numericVal > 0) {
+                    row.debit = 0; // Standard single-entry row convenience
+                }
+            }
+
+            // Re-render row inputs values formatted cleanly without losing focus
+            renderTableRows();
+            calculateTotals();
+        }
+
+        // Calculate Totals, Selisih, and Balance Indicator Status
+        function calculateTotals() {
+            let totalDebit = 0;
+            let totalCredit = 0;
+
+            journalRows.forEach(row => {
+                totalDebit += Number(row.debit) || 0;
+                totalCredit += Number(row.credit) || 0;
+            });
+
+            const selisih = Math.abs(totalDebit - totalCredit);
+
+            // Update UI Total Texts
+            document.getElementById('totalDebitDisplay').innerText = formatCurrency(totalDebit);
+            document.getElementById('totalCreditDisplay').innerText = formatCurrency(totalCredit);
+
+            // Dynamic Balance Validation Rules
+            const statusBadge = document.getElementById('statusBadge');
+            const statusIcon = document.getElementById('statusIcon');
+            const statusText = document.getElementById('statusText');
+            const selisihText = document.getElementById('selisihText');
+            const submitBtn = document.getElementById('submitBtn');
+
+            const isBalanced = (totalDebit === totalCredit) && (totalDebit > 0);
+
+            if (totalDebit === 0 && totalCredit === 0) {
+                // Condition: Total = 0
+                statusBadge.className = "w-full px-4 py-3 rounded-xl border flex items-center justify-between transition-all duration-300 bg-amber-50 border-amber-300 text-amber-800";
+                statusIcon.className = "w-3 h-3 rounded-full bg-amber-500 inline-block";
+                statusText.innerText = "✕ UNBALANCED (TOTAL NOL)";
+                selisihText.classList.add('hidden');
+                
+                lockSubmitButton(submitBtn, true);
+            } else if (isBalanced) {
+                // Condition: Debit == Credit && Total > 0
+                statusBadge.className = "w-full px-4 py-3 rounded-xl border flex items-center justify-between transition-all duration-300 bg-emerald-50 border-emerald-300 text-emerald-800 shadow-sm shadow-emerald-100";
+                statusIcon.className = "w-3 h-3 rounded-full bg-emerald-500 inline-block shadow-sm shadow-emerald-400";
+                statusText.innerText = "✓ BALANCE";
+                selisihText.classList.add('hidden');
+
+                lockSubmitButton(submitBtn, false);
+            } else {
+                // Condition: Unbalanced (Debit != Credit)
+                statusBadge.className = "w-full px-4 py-3 rounded-xl border flex items-center justify-between transition-all duration-300 bg-rose-50 border-rose-300 text-rose-800 shadow-sm shadow-rose-100";
+                statusIcon.className = "w-3 h-3 rounded-full bg-rose-500 inline-block animate-ping";
+                statusText.innerText = "✕ UNBALANCED";
+                selisihText.innerText = `Selisih: ${formatCurrency(selisih)}`;
+                selisihText.classList.remove('hidden');
+
+                lockSubmitButton(submitBtn, true);
+            }
+        }
+
+        // Toggle submit button state
+        function lockSubmitButton(btn, lock) {
+            if (lock) {
+                btn.disabled = true;
+                btn.className = "w-full sm:w-auto px-8 py-3 bg-slate-200 text-slate-400 font-semibold rounded-xl transition-all shadow-none flex items-center justify-center gap-2 cursor-not-allowed opacity-70";
+            } else {
+                btn.disabled = false;
+                btn.className = "w-full sm:w-auto px-8 py-3 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold rounded-xl transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 cursor-pointer transform hover:-translate-y-0.5";
+            }
+        }
+
+        // Form Submission handler
+        function handleFormSubmit(event) {
+            event.preventDefault();
+
+            // Validate account choices
+            const missingAccount = journalRows.some(r => !r.accountCode || r.accountCode.trim() === '');
+            if (missingAccount) {
+                showToast("Silakan pilih Akun COA untuk semua baris jurnal!", "error");
+                return;
+            }
+
+            // Construct JSON Payload
+            const transactionDate = document.getElementById('transactionDate').value;
+            const referenceNo = document.getElementById('referenceNo').value.trim();
+            const paidTo = document.getElementById('paidTo').value.trim();
+            const description = document.getElementById('description').value.trim();
+
+            let totalDebit = 0;
+            let totalCredit = 0;
+
+            const formattedLines = journalRows.map((row, idx) => {
+                const accObj = CHART_OF_ACCOUNTS.find(a => a.code === row.accountCode);
+                totalDebit += Number(row.debit);
+                totalCredit += Number(row.credit);
+
+                return {
+                    line_number: idx + 1,
+                    account_code: row.accountCode,
+                    account_name: accObj ? accObj.name : "",
+                    account_category: accObj ? accObj.category : "",
+                    memo: row.memo || description,
+                    debit: Number(row.debit),
+                    credit: Number(row.credit)
+                };
+            });
+
+            const payload = {
+                voucher_metadata: {
+                    voucher_type: "CASH_OUTFLOW",
+                    voucher_type_label: "Voucher Kas Keluar (BKK)",
+                    transaction_date: transactionDate,
+                    reference_no: referenceNo,
+                    paid_to: paidTo || null,
+                    description: description,
+                    created_at: new Date().toISOString()
+                },
+                summary: {
+                    total_debit: totalDebit,
+                    total_credit: totalCredit,
+                    is_balanced: totalDebit === totalCredit && totalDebit > 0,
+                    currency: "IDR"
+                },
+                journal_entries: formattedLines
+            };
+
+            // Display Output JSON Modal
+            showJsonModal(payload);
+        }
+
+        // Display JSON Payload Modal
+        function showJsonModal(data) {
+            const modal = document.getElementById('jsonModal');
+            const modalCard = document.getElementById('jsonModalCard');
+            const jsonContent = document.getElementById('jsonContent');
+
+            jsonContent.innerText = JSON.stringify(data, null, 2);
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalCard.classList.remove('scale-95');
+                modalCard.classList.add('scale-100');
+            }, 10);
+        }
+
+        // Close JSON Modal
+        function closeJsonModal() {
+            const modal = document.getElementById('jsonModal');
+            const modalCard = document.getElementById('jsonModalCard');
+
+            modal.classList.add('opacity-0');
+            modalCard.classList.remove('scale-100');
+            modalCard.classList.add('scale-95');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Copy JSON payload to clipboard safely
+        function copyJsonToClipboard() {
+            const jsonText = document.getElementById('jsonContent').innerText;
+
+            // Fallback clipboard method for iframe / restricted DOM environments
+            const textArea = document.createElement('textarea');
+            textArea.value = jsonText;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+
+            try {
+                document.execCommand('copy');
+                const btnText = document.getElementById('copyBtnText');
+                btnText.innerText = "Tersalin! ✓";
+                showToast("Payload JSON berhasil disalin ke clipboard!", "success");
+
+                setTimeout(() => {
+                    btnText.innerText = "Salin JSON";
+                }, 2000);
+            } catch (err) {
+                showToast("Gagal menyalin text.", "error");
+            } finally {
+                document.body.removeChild(textArea);
+            }
+        }
+
+        // Preset Sample Data for Testing
+        function loadSampleData() {
+            document.getElementById('referenceNo').value = generateDefaultRefNo();
+            document.getElementById('paidTo').value = "PT Telekomunikasi Indonesia";
+            document.getElementById('description').value = "Pembayaran internet kantor & pembelian kertas printer A4";
+
+            journalRows = [];
+            nextRowId = 1;
+
+            // Line 1: Beban Internet (Debit 1.500.000)
+            addJournalRow({
+                accountCode: "5300",
+                memo: "Tagihan IndiHome Oktober 2026",
+                debit: 1500000,
+                credit: 0
+            });
+
+            // Line 2: Beban ATK (Debit 500.000)
+            addJournalRow({
+                accountCode: "5400",
+                memo: "Kertas A4 & tinta printer",
+                debit: 500000,
+                credit: 0
+            });
+
+            // Line 3: Bank BCA (Kredit 2.000.000)
+            addJournalRow({
+                accountCode: "1020",
+                memo: "Transfer Bank BCA",
+                debit: 0,
+                credit: 2000000
+            });
+
+            showToast("Contoh data berhasil dimuat!", "info");
+        }
+
+        // Reset Form
+        function resetForm() {
+            document.getElementById('voucherForm').reset();
+            document.getElementById('transactionDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('referenceNo').value = generateDefaultRefNo();
+
+            journalRows = [];
+            nextRowId = 1;
+
+            addJournalRow();
+            addJournalRow();
+
+            calculateTotals();
+            showToast("Formulir telah direset.", "info");
+        }
+
+        // Toast Notification Helper
+        function showToast(message, type = "info") {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+
+            let bgColors = "bg-slate-800 text-white border-slate-700";
+            let icon = "fa-circle-info text-sky-400";
+
+            if (type === "success") {
+                bgColors = "bg-emerald-900 text-emerald-100 border-emerald-700";
+                icon = "fa-circle-check text-emerald-400";
+            } else if (type === "error") {
+                bgColors = "bg-rose-900 text-rose-100 border-rose-700";
+                icon = "fa-circle-exclamation text-rose-400";
+            } else if (type === "warning") {
+                bgColors = "bg-amber-900 text-amber-100 border-amber-700";
+                icon = "fa-triangle-exclamation text-amber-400";
+            }
+
+            toast.className = `pointer-events-auto px-4 py-3 rounded-xl border ${bgColors} shadow-xl text-xs font-medium flex items-center space-x-3 transition-all duration-300 transform translate-y-2 opacity-0`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icon} text-base"></i>
+                <span>${escapeHtml(message)}</span>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Helper Utility Functions
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function formatNumberInput(amount) {
+            return new Intl.NumberFormat('id-ID').format(amount);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
