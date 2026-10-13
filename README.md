@@ -4,6 +4,11 @@ Repository ini berisi kumpulan jawaban dan implementasi tugas mid-term
 pemrograman basis data. Materinya mencakup rancangan jurnal akuntansi,
 pengelolaan stok dengan trigger, serta aplikasi web voucher kas keluar.
 
+## Demo Aplikasi
+
+Coba aplikasi voucher kas keluar secara langsung:
+[Buka Demo Voucher Kas Keluar](https://mohamadafrizalhuda-art.github.io/mid-term---voucher-kas/).
+
 ## Isi Repository
 
 ### `soal 1/` — Jurnal Akuntansi
@@ -45,9 +50,9 @@ memeriksa keseimbangan jurnal.
 - `custom_stylesheet.md` — catatan stylesheet untuk tampilan dan pencetakan.
 - `README.md` — petunjuk khusus untuk aplikasi pada folder ini.
 
-Untuk mencoba aplikasi web, buka `soal 3/voucher_kas_keluar.html` di browser.
-Tailwind CSS, Google Fonts, dan Font Awesome dimuat dari CDN, sehingga koneksi
-internet diperlukan agar seluruh tampilan dan ikon muncul.
+Untuk menjalankannya secara lokal, buka `soal 3/voucher_kas_keluar.html` di
+browser. Tailwind CSS, Google Fonts, dan Font Awesome dimuat dari CDN, sehingga
+koneksi internet diperlukan agar seluruh tampilan dan ikon muncul.
 
 ## Menjalankan SQL
 
